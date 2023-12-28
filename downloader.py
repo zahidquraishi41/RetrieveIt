@@ -3,7 +3,6 @@ from downloaders.reddit_video import RedditVideo
 from downloaders.reddit_gallery import RedditGallery
 from post import Post, MediaType
 import os
-import re
 
 
 class Downloader:
@@ -12,8 +11,8 @@ class Downloader:
         self._supported_domain = ('i.redd.it', 'v.redd.it', 'reddit.com')
 
     def download(self, post: 'Post'):
-        assert re.search('|'.join(self._supported_domain), post.domain), \
-            f"ID: {post.id} has unsupported domain."
+        assert post.domain in self._supported_domain, \
+            f"Unsupported domain."
 
         nsfw = '_NSFW' if post.nsfw else ''
         download_dir = os.path.join(

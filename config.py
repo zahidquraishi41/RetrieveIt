@@ -10,7 +10,8 @@ default_config = {
     'client_secret': 'BOT CLIENT SECRET',
     'user_agent': 'savedscrapper by u/you',
     'unsave_after_download': False,
-    'download_dir': 'downloads/'
+    'unsave_removed_post': False,
+    'download_dir': 'downloads/',
 }
 
 
@@ -35,15 +36,16 @@ def _validate_config(config: dict) -> bool:
             raise Exception(f'Missing "{key}" from config.json')
 
     for key in default_config.keys():
-        if key == 'unsave_after_download':
+        if key in ('unsave_after_download', 'unsave_removed_post'):
             continue
         if not isinstance(config[key], str):
             raise Exception(f'"{key}" must be a string')
         if not config[key]:
             raise Exception(f'"{key}" cannot be empty')
 
-    if not isinstance(config['unsave_after_download'], bool):
-        raise Exception(f'"unsave_after_download" must be of boolean type')
+    for key in ('unsave_removed_post', 'unsave_after_download'):
+        if not isinstance(config[key], bool):
+            raise Exception(f'"{key}" must be of boolean type')
 
     os.makedirs(config['download_dir'], exist_ok=True)
 

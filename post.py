@@ -33,16 +33,23 @@ class Post:
         )
         self.media_type = Post.get_media_type(submission)
         self.nsfw = getattr(submission, 'over_18', False)
+        if self.media_type == MediaType.VIDEO:
+            self.is_removed = not bool(self.media)
+        elif self.media_type == MediaType.GALLERY:
+            self.is_removed = not bool(self.media_metadata)
+        else:
+            self.is_removed = bool(getattr(
+                submission,
+                'removed_by_category',
+                False
+            ))
 
     def do_asserts(self):
-        assert self.url, f"Post doesn't contain a link"
-        assert self.subreddit, f"Failed retrieving subreddit name"
         assert self.media_type != MediaType.UNKNOWN, \
             f"Post is of unsupported type"
-        if self.media_type == MediaType.VIDEO:
-            assert self.media, f"Post is removed"
-        elif self.media_type == MediaType.GALLERY:
-            assert self.media_metadata, f"Post is removed"
+        assert not self.is_removed, f"Post is removed"
+        assert self.url, f"Post doesn't contain a link"
+        assert self.subreddit, f"Failed retrieving subreddit name"
 
     @staticmethod
     def get_media_type(sub: Submission):

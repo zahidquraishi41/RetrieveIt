@@ -37,6 +37,10 @@ def main():
                 continue
             print('\nDownloading...')
             print(str(post))
+            if post.is_removed and config['unsave_removed_post']:
+                submission.unsave()
+                print('Post is unsaved.')
+                continue
             post.do_asserts()
 
             downloader.download(post)
@@ -50,7 +54,7 @@ def main():
             break
         except Exception as e:
             print(f'Error: {e}')
-    print(f'Downloaded {downloaded}/{total}')
+    print(f'\nDownloaded {downloaded}/{total}')
     db.close()
 
 
