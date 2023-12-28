@@ -32,6 +32,7 @@ class Post:
             'u_deleted'
         )
         self.media_type = Post.get_media_type(submission)
+        self.nsfw = getattr(submission, 'over_18', False)
 
     def do_asserts(self):
         assert self.url, f"Post doesn't contain a link"

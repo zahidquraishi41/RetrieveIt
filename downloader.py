@@ -15,9 +15,10 @@ class Downloader:
         assert re.search('|'.join(self._supported_domain), post.domain), \
             f"ID: {post.id} has unsupported domain."
 
+        nsfw = '_NSFW' if post.nsfw else ''
         download_dir = os.path.join(
             self._download_dir,
-            'Videos' if post.media_type == MediaType.VIDEO else 'Images',
+            f'Videos{nsfw}' if post.media_type == MediaType.VIDEO else f'Images{nsfw}',
             post.subreddit
         )
 
