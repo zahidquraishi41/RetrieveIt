@@ -37,7 +37,7 @@ class BaseDownloader:
 
         # Generating unique timestamp
         while True:
-            timestamp = str(int(time.time() * 10))
+            timestamp = str(int(time.time()))
             filepath = os.path.join(
                 self.download_dir,
                 timestamp + ' - ' + filename
