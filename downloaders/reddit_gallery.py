@@ -8,9 +8,11 @@ class RedditGallery(BaseDownloader):
 
     def download(self):
         base_url = 'https://i.redd.it/'
-        ids = list(self.post.media_metadata.keys())
-        ext = self.post.media_metadata[ids[0]]['m'].split('/')[1]
+        urls = []
+        for k, v in self.post.media_metadata.items():
+            ext = v['m'].split('/')[1]
+            url = base_url + k + '.' + ext
+            urls.append(url)
 
-        urls = [base_url + id + '.' + ext for id in ids]
         for url in urls:
             self._save(url)
