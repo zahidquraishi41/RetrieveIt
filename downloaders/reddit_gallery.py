@@ -14,5 +14,4 @@ class RedditGallery(BaseDownloader):
             url = base_url + k + '.' + ext
             urls.append(url)
 
-        for url in urls:
-            self._save(url)
+        return [self._save(url) for url in urls]

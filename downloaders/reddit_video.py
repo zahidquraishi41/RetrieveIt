@@ -28,7 +28,7 @@ class RedditVideo(BaseDownloader):
 
         if len(adaptation_set) == 1:
             print('Warning: No audio found.')
-            return video_path
+            return [video_path]
 
         # downloading audio
         base_url = adaptation_set[1].getElementsByTagName('BaseURL')[0]\
@@ -61,4 +61,4 @@ class RedditVideo(BaseDownloader):
                 video_clip.close()
             if 'audio_clip' in locals() and audio_clip:
                 audio_clip.close()
-        return merged_path
+        return [merged_path]

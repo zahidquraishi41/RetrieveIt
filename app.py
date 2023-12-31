@@ -43,10 +43,10 @@ def main():
                 continue
             post.do_asserts()
 
-            downloader.download(post)
+            paths = downloader.download(post)
             print('Downloaded successfully.')
             downloaded += 1
-            db.add_post(post)
+            db.add(post, paths)
             if config['unsave_after_download']:
                 submission.unsave()
         except KeyboardInterrupt:

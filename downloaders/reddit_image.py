@@ -7,4 +7,4 @@ class RedditImage(BaseDownloader):
         super().__init__(post, download_dir)
 
     def download(self):
-        return self._save(self.post.url)
+        return [self._save(self.post.url)]

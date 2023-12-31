@@ -1,6 +1,7 @@
 import sqlite3 as sql
 import time
 from post import Post
+from typing import List
 
 """Database Schema
 post
@@ -23,9 +24,10 @@ class Database:
         self._path = path
         self._con = sql.Connection(self._path)
         self._cur = self._con.cursor()
+        self._cur.execute('PRAGMA foreign_keys = ON;')
         self._create_tables()
 
-    def add_post(self, post: 'Post'):
+    def add(self, post: 'Post', download_paths=List[str]):
         self._cur.execute(
             '''INSERT INTO post VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)''',
             (
@@ -34,6 +36,11 @@ class Database:
                 post.created_utc, int(time.time())
             )
         )
+        for download_path in download_paths:
+            self._cur.execute(
+                'INSERT INTO download VALUES (?, ?)',
+                (post.id, download_path)
+            )
         self._con.commit()
 
     def exists(self, post: Post) -> bool:
@@ -57,7 +64,13 @@ class Database:
             created_utc INTEGER,
             downloaded_utc INTEGER
         )'''
+        download_table = '''CREATE TABLE IF NOT EXISTS download (
+            id TEXT,
+            path TEXT,
+            FOREIGN KEY (id) REFERENCES post (id)
+        )'''
         self._cur.execute(post_table)
+        self._cur.execute(download_table)
         self._con.commit()
 
     def close(self):
