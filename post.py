@@ -20,6 +20,7 @@ class Post:
         self.created_utc = int(submission.created_utc)
         self.upvotes = getattr(submission, 'score', 0)
         self.media_metadata = getattr(submission, 'media_metadata', {})
+        self.gallery_data = getattr(submission, 'gallery_data', {})
         self.media = getattr(submission, 'media', {})
         self.subreddit = getattr(
             getattr(submission, 'subreddit'),
@@ -36,7 +37,9 @@ class Post:
         if self.media_type == MediaType.VIDEO:
             self.is_removed = not bool(self.media)
         elif self.media_type == MediaType.GALLERY:
-            self.is_removed = not bool(self.media_metadata)
+            self.is_removed = not bool(
+                self.media_metadata and self.gallery_data
+            )
         else:
             self.is_removed = bool(getattr(
                 submission,
