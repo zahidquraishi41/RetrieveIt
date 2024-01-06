@@ -28,19 +28,19 @@ class BaseDownloader:
             max_len=180
         )
         filename = re.sub(r'\s+', ' ', filename).strip()
+        filename = ' - ' + filename if filename else ''
 
         # Extracting extension
         extension = url.rsplit('.')[-1].split('?')[0].lower()
-        extension = extension if extension and len(extension) < 5\
-            else 'unknown'
-        filename += f'.{extension}'
+        extension = '.' + extension if extension and len(extension) < 5\
+            else '.unknown'
 
         # Generating unique timestamp
         while True:
             timestamp = str(int(time.time()))
             filepath = os.path.join(
                 self.download_dir,
-                timestamp + ' - ' + filename
+                timestamp + filename + extension
             )
             if not os.path.exists(filepath):
                 break
