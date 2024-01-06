@@ -3,6 +3,7 @@ from database import Database
 from config import get_config
 import praw
 from post import Post
+from post import MediaType
 
 
 def main():
@@ -32,9 +33,14 @@ def main():
                 post = Post(reddit.submission(id=op_id))
             else:
                 post = Post(submission)
+
             if db.exists(post):
-                print(f'Skipping: {post.id} - {post.title}')
+                print(f'Skipping: {post.id} - {post.title} (Already downloaded.)')
                 continue
+            elif post.media_type == MediaType.COMMENT:
+                print(f'Skipping: {post.id} - {post.title} (Post is a comment.)')
+                continue
+
             print('\nDownloading...')
             print(str(post))
             if post.is_removed and config['unsave_removed_post']:

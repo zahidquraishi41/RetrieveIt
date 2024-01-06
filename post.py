@@ -7,7 +7,8 @@ class MediaType(Enum):
     IMAGE = 0
     GALLERY = 1
     VIDEO = 2
-    UNKNOWN = 3
+    COMMENT = 3
+    UNKNOWN = 9
 
 
 class Post:
@@ -56,6 +57,9 @@ class Post:
 
     @staticmethod
     def get_media_type(sub: Submission):
+        if getattr(sub, 'fullname')[:3] == 't1_':
+            return MediaType.COMMENT
+
         if not isinstance(sub, Submission) or not getattr(sub, 'fullname', '')[:3] == 't3_':
             return MediaType.UNKNOWN
 
