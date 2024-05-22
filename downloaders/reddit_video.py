@@ -21,7 +21,9 @@ class RedditVideo(BaseDownloader):
         adaptation_set = dom.getElementsByTagName('AdaptationSet')
 
         # downloading video
-        base_url = adaptation_set[0].getElementsByTagName('BaseURL')[0]\
+        base_url = adaptation_set[0]\
+            .getElementsByTagName('Representation')[-1]\
+            .getElementsByTagName('BaseURL')[0]\
             .firstChild.nodeValue
         video_url = self.post.url + '/' + base_url
         video_path = self._save(video_url)
